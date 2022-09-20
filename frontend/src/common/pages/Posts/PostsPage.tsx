@@ -1,13 +1,15 @@
 import React from "react"
-import NavBar from "./NavBar"
+import Posts from "../../../features/posts/Posts"
+import NavBar from "../../components/Nav/NavBar"
 
-const Posts = () => {
+const PostsPage = () => {
     return (
         <main>
             <NavBar/>
             <h1 style={{textAlign: "center", paddingTop: "2rem"}}>Posts Page</h1>
+            <Posts/>
         </main>
     )
 }
 
-export default Posts
+export default PostsPage
