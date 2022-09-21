@@ -6,29 +6,36 @@ export interface Post {
     content: string;
 }
 
+const POSTS_URL = "/posts"
+
 export const postApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getPosts: builder.query<Post[], void>({
-            query: () => "posts",
+            query: () => POSTS_URL,
+            providesTags: ["Post"],
         }),
         createPost: builder.mutation<Post, Partial<Post>>({
             query: (body) => ({
-                url: "posts",
+                url: POSTS_URL,
                 method: "POST",
                 body,
             }),
+            invalidatesTags: ["Post"],
         }),
         updatePost: builder.mutation<Post, Partial<Post>>({
             query: (body) => ({
-                url: `posts`,
+                url: POSTS_URL,
                 method: "PUT",
                 body,
             }),
+            invalidatesTags: ["Post"],
         }),
         deletePost: builder.mutation<Post, number>({
             query: (id) => ({
-                url: `posts/${id}`,
+                url: `${POSTS_URL}/${id}`,
+                method: "DELETE",
             }),
+            invalidatesTags: ["Post"],
         }),
     }),
 })
