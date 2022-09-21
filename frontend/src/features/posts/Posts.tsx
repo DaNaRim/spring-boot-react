@@ -1,21 +1,23 @@
-import React, {useEffect} from "react"
-import {useAppDispatch, useAppSelector} from "../../app/hooks"
+import React from "react"
 
 import styles from "./Posts.module.scss"
-import {fetchPosts, postsSelector} from "./PostsSlice"
+import {useGetPostsQuery} from "./PostsSlice"
 
 const Posts = () => {
-    const dispatch = useAppDispatch()
+    const {
+        data: posts,
+        isLoading,
+        isSuccess,
+        isError,
+        error,
+    } = useGetPostsQuery()
 
-    const posts = useAppSelector(postsSelector)
-
-    useEffect(() => {
-        dispatch(fetchPosts())
-    }, [])
+    console.log("posts", posts)
 
     return (
         <section className={styles.posts}>
-            {posts.length !== 0 && posts.map(post => (
+            {isLoading && <p>Loading...</p>}
+            {isSuccess && posts.map(post => (
                 <article className={styles.post} key={post.id}>
                     <h3>{post.title}</h3>
                     <p>{post.content}</p>

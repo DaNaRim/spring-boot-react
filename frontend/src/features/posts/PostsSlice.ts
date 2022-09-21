@@ -1,6 +1,4 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit"
-import axios from "axios"
-import {RootState} from "../../app/store"
+import {apiSlice} from "../api/apiSlice"
 
 export interface Post {
     id: number;
@@ -8,43 +6,36 @@ export interface Post {
     content: string;
 }
 
-export interface PostsState {
-    posts: Post[];
-    status: "idle" | "loading" | "failed";
-}
-
-const initialState: PostsState = {
-    posts: [],
-    status: "idle",
-}
-
-export const fetchPosts = createAsyncThunk(
-    "posts/fetchPosts",
-    () => {
-        return axios.get(`/api/posts`)
-            .then(response => response.data)
-    },
-)
-
-export const postsSlice = createSlice({
-    name: "posts",
-    initialState,
-    reducers: {},
-    extraReducers: (builder) => {
-        builder
-            .addCase(fetchPosts.pending, (state) => {
-                state.status = "loading"
-            })
-            .addCase(fetchPosts.fulfilled, (state, action) => {
-                state.status = "idle"
-                state.posts = action.payload
-            })
-            .addCase(fetchPosts.rejected, (state) => {
-                state.status = "failed"
-            })
-    },
+export const postApi = apiSlice.injectEndpoints({
+    endpoints: (builder) => ({
+        getPosts: builder.query<Post[], void>({
+            query: () => "posts",
+        }),
+        createPost: builder.mutation<Post, Partial<Post>>({
+            query: (body) => ({
+                url: "posts",
+                method: "POST",
+                body,
+            }),
+        }),
+        updatePost: builder.mutation<Post, Partial<Post>>({
+            query: (body) => ({
+                url: `posts`,
+                method: "PUT",
+                body,
+            }),
+        }),
+        deletePost: builder.mutation<Post, number>({
+            query: (id) => ({
+                url: `posts/${id}`,
+            }),
+        }),
+    }),
 })
 
-export const postsSelector = (state: RootState) => state.posts.posts
-
-export default postsSlice.reducer
+export const {
+    useGetPostsQuery,
+    useCreatePostMutation,
+    useUpdatePostMutation,
+    useDeletePostMutation,
+} = postApi

@@ -1,8 +1,6 @@
 package com.danarim.springBootReact.posts;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,4 +19,18 @@ public class PostController {
         return postService.getAllPosts();
     }
 
+    @PostMapping
+    public Post createPost(Post post) {
+        return postService.createPost(post);
+    }
+
+    @PutMapping
+    public Post updatePost(Post post) {
+        return postService.updatePost(post);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deletePost(@PathVariable Long id) {
+        postService.deletePost(id);
+    }
 }

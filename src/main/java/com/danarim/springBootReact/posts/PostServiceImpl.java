@@ -22,16 +22,16 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post createPost(Post post) {
-        return null;
+        return postRepository.save(post);
     }
 
     @Override
     public Post updatePost(Post post) {
-        return null;
+        return postRepository.save(post);
     }
 
     @Override
     public void deletePost(Long id) {
-
+        postRepository.deleteById(id);
     }
 }
